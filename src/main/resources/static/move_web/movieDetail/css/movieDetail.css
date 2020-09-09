@@ -1,0 +1,17 @@
+.main-container{
+    background: url("/move_web/public/img/bg.jpg");
+    /* 让图片不重覆排列 */
+    background-repeat:no-repeat;
+    /* 固定背景图片位置 */
+}
+.nav{
+    background-color: #044763;
+}
+#bottom_wrapper{
+    position: relative;
+    top: 100px;
+}
+.main{
+    position: relative;
+    top:65px;
+}

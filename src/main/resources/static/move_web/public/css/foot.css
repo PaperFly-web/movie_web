@@ -1,0 +1,36 @@
+.foot-a:hover {
+    color: #56d242;
+}
+.foot-a{
+   color: rgba(130,130,130,0.51);
+    font-weight: bold;
+}
+
+#bottom_wrapper {
+    position: relative;
+    width: 100%;
+    background-color: black;
+}
+/*这里就是设置底部的，背景颜色宽度*/
+#bottom {
+    width: 960px;
+    margin: 0 auto;
+    padding: 20px 0;
+    color: #999;
+    display: flex;
+    justify-content: space-around;
+}
+/*这个设置底部为flex，方便控制元素居中*/
+
+#bottom h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 20px }
+
+#footer_wrapper {
+    width: 100%;
+    background: #272b2b;
+}
+#footer {
+    width: 960px;
+    margin: 0 auto;
+    padding: 10px;
+    text-align: center
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paperfly.admin.mapper.ApproveMoveMapper">
+    <update id="approveMove" parameterType="list">
+        UPDATE move set move.m_is_pass=#{list[0].approveMIsPass} WHERE move.m_id in
+        <foreach collection="list"  item="approveMove" open="(" close=")" separator=",">
+           #{approveMove.mId}
+        </foreach>;
+
+        INSERT into
+        approve_move(approve_m_is_pass, approve_m_create_time,
+        user_id, approve_m_note, m_id)
+
+
+        VALUES
+        <foreach collection="list"  item="approveMove" open="(" close=")" separator="),(">
+            #{approveMove.approveMIsPass},#{approveMove.approveMCreateTime},#{approveMove.userId},
+            #{approveMove.approveMNote},#{approveMove.mId}
+        </foreach>;
+
+
+    </update>
+    <select id="selectNoPassMoves" parameterType="Move" resultMap="selectMovesMap">
+        select move.*,user.user_name from move_web.move,move_web.user
+        where move.m_is_pass='0' and move.user_id=user.user_id
+        order by m_create_time desc
+        limit #{page} ,12
+    </select>
+    <resultMap id="selectMovesMap" type="Move">
+        <id column="m_id" property="mId"/>
+        <result column="m_is_pass" property="mIsPass"/>
+        <result column="m_size" property="mSize"/>
+        <result column="user_id" property="userId"/>
+        <result column="m_hot" property="mHot"/>
+        <result column="m_save_path" property="mSavePath"/>
+        <result column="m_direct" property="mDirect"/>
+        <result column="m_story" property="mStory"/>
+        <result column="m_area" property="mArea"/>
+        <result column="m_type" property="mType"/>
+        <result column="m_main_role" property="mMainRole"/>
+        <result column="m_public_time" property="mPublicTime"/>
+        <result column="m_pic_save_path" property="mPicSavePath"/>
+        <result column="m_name" property="mName"/>
+        <result column="m_create_time" property="mCreateTime"/>
+        <result column="" property=""/>
+        <association property="user" javaType="User">
+            <result column="user_name" property="userName"/>
+        </association>
+    </resultMap>
+</mapper>

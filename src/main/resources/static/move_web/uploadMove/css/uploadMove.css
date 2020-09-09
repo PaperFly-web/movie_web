@@ -1,0 +1,42 @@
+.nav{
+	background-color: #234455;
+}
+*{
+    margin: 0;
+    padding:0 ;
+}
+.center-container{
+	position: relative;
+	top: 60px;
+}
+
+a{
+	text-decoration: none;
+}
+.nva{
+	width: 100%;
+	height: 40px;
+	margin-top: 0px;
+	background-color: darkolivegreen;
+}
+.list{
+	width: 80%;
+	height: 40px;
+	margin:0 auto;
+	list-style-type: none;
+}
+.list li{float: left;}
+.list li a{
+	padding: 0 30px;
+	color:#aaa;
+	line-height: 40px;
+	display: block;
+}
+.list li a:hover{
+	background: #333;
+	color: #fff;
+}
+.list li a:on{
+	background: #333;
+	color:#fff;
+}

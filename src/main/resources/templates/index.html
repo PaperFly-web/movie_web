@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>漏网之鱼电影网</title>
+	<!--电影详情css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/movieDetail/css/style.css}"/>
+	<!--end 电影详情css-->
+
+	<!--注册登录css-->
+	<link th:href="@{/move_web/index/css/style.css}" rel='stylesheet' type='text/css' media="all" />
+	<!--end 注册登录css-->
+
+	<!--导航栏css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/public/css/nav.css}" />
+	<!-- end 导航栏css-->
+
+	<!--轮播css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/slider.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/swiper.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/animate.min.css}" />
+	<!--end 轮播css-->
+
+	<!--搜索css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/search-form.css}">
+	<!--end 搜素css-->
+
+	<!--页尾css-->
+	<link th:href="@{/move_web/public/css/foot.css}" rel='stylesheet' type='text/css' media="all" />
+	<!--end 页尾css-->
+
+	<!--消息弹出提示css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/fy-alert/css/fy-alert.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/css/demo.css}">
+	<!--end 消息弹出提示css-->
+
+	<!--主页自己css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/index.css}">
+	<!--end 主页自己css-->
+	<script type="application/x-javascript">
+        addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+        function hideURLbar(){ window.scrollTo(0,1); }
+	</script>
+</head>
+
+<body>
+<!--后端消息提示区-->
+<!--方便提示是否查询到电影,在登录注册的index.js中使用-->
+<div th:if="${msg==null}">
+	<input  type="hidden" class="backTipsCode" value="111">
+	<input  type="hidden" class="backTipsMsg" value="111">
+</div>
+<div th:if="${msg!=null}">
+	<input th:value="${msg.code}" type="hidden" class="backTipsCode" value="111">
+	<input th:value="${msg.message}" type="hidden" class="backTipsMsg" value="111">
+</div>
+<!--后端消息提示区结束-->
+<!--登录注册开始-->
+<div id="div1">
+
+</div>
+<div id="div2">
+	<div class="form-w3ls">
+		<input type="button" value="ｘ" onClick="closeme()" style="cursor: hand;float: right;">
+		<div class="form-head-w3l">
+			<h2>S</h2>
+		</div>
+		<div class="alert alert-warning" role="alert">
+			<span id="alertMsg"  style="color: #f5d8cc"></span>
+		</div>
+		<ul class="tab-group cl-effect-4">
+			<li class="tab active"><a href="#signin-agile">登录</a></li>
+			<li class="tab"><a href="#signup-agile">注册</a></li>
+		</ul>
+		<div class="tab-content">
+			<div id="signin-agile">
+				<form action="/login" method="post">
+					<input type="text" name="userPhone" id="sign-in-no" placeholder="手机号"  required="required">
+					<input type="password" id="login-pwd" name="userPwd" placeholder="密码"  required="required">
+					<input type="submit" class="sign-in" value="登录" disabled="disabled">
+				</form>
+			</div>
+			<div id="signup-agile">
+				<form action="#" >
+					<input type="text" id="userName" name="userName" placeholder="用户名"  required="required">
+					<input type="text" name="userPhone" id="sign-up-no" placeholder="手机号"  required="required">
+					<input type="password" name="userPwd" id="password" placeholder="密码(至少包含6位字符)"  required="required">
+					<input type="password" id="re-password"  placeholder="确认密码" required="required">
+					<input type="button" class="register" value="注册" disabled="disabled" >
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--登录注册结束-->
+
+<!--导航开始-->
+<div class="nav">
+
+
+
+	<div class="w1200">
+		<div class="logo">
+			<a href="/"><img style="width: 65px" th:src="@{/move_web/public/img/logo.png}" /></a>
+		</div>
+		<div class="menu">
+			<ul>
+				<li>
+					<h2><a href="/">首页</a></h2>
+				</li>
+				<li >
+					<h2>
+						<a href="/toLatestMovie">最新上映</a>
+					</h2>
+				</li>
+
+				<li >
+					<h2><a href="/toHotMovie">最热播放</a></h2>
+				</li>
+				<li>
+					<h2><a href="/toWebIntroduce" target="_self">关于我们</a></h2>
+				</li>
+				<li>
+					<h2><a href="/toUploadMove" target="_self" shiro:user="">上传影视</a></h2>
+				</li>
+				<li>
+					<!-- 搜索 -->
+					<section class="container">
+						<form onsubmit="submitFn(this, event);">
+							<div class="search-wrapper">
+							<div class="input-holder">
+								<input type="text" class="search-input" placeholder="请输入搜索内容" />
+								<button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+							</div>
+								<span class="close" onclick="searchToggle(this, event);"></span>
+							<div class="result-container"></div>
+							</div>
+						</form>
+					</section>
+
+					<script type="text/javascript">
+						function searchToggle(obj, evt){
+						var container = $(obj).closest('.search-wrapper');
+
+						if(!container.hasClass('active')){
+							container.addClass('active');
+							evt.preventDefault();
+						}
+						else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+							container.removeClass('active');
+							// clear input
+							container.find('.search-input').val('');
+							// clear and hide result container when we press close
+							container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+						}
+					}
+
+					function submitFn(obj, evt){
+						value = $(obj).find('.search-input').val().trim();
+						_html = "搜索:"+value;
+
+						if(!value.length){
+						_html = "输入不能为空哦！";
+						}
+						else{
+							_html += "<b>" + value + "</b>";
+							window.open("/findMoveByKeyWords?keyWords="+value+"&page=0","_self")
+						}
+
+						$(obj).find('.result-container').html('<span>' + _html + '</span>');
+						$(obj).find('.result-container').fadeIn(100);
+
+						evt.preventDefault();
+					}
+				</script>
+
+				<!--搜索结束-->
+				</li>
+			</ul>
+		</div>
+		<div class="login" shiro:guest="">
+			<a href="#" onClick="openme()">登录/注册</a>
+		</div>
+		<div class="logout" shiro:user="">
+			<a href="/logout" >退出</a>
+		</div>
+		<div class="logout" shiro:hasPermission="3">
+			<a href="/admin/Administrator" >管理员中心</a>
+		</div>
+		<div class="login" shiro:user="">
+			<a href="/toUserInfo" >个人信息</a>
+		</div>
+	</div>
+</div>
+<!--导航结束-->
+
+<!--轮播开始-->
+<div class="swiper-banner swiper-container" style="position: relative;top: 50px;">
+	<div class="swiper-wrapper">
+		<a class="swiper-slide slide3" href="#">
+			<div class="w1200">
+				<div shiro:user="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div id="playBtn1" class="pa btn" onclick="window.open('/','_self');">立即播放</div>
+				</div>
+				<div shiro:guest="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div class="pa btn" onclick="warning('请先登录')">立即播放</div>
+				</div>
+				<div class="img5 ani pa" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<img id="img1" th:src="@{/move_web/public/img/loadError.jpg}" style="width:800px;height:370px;" alt="">
+				</div>
+			</div>
+		</a>
+
+		<a class="swiper-slide slide1" href="#">
+			<div class="w1200">
+				<div shiro:user="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div id="playBtn2" class="pa btn" onclick="window.open('/','_self');">立即播放</div>
+				</div>
+				<div shiro:guest="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div class="pa btn" onclick="warning('请先登录')">立即播放</div>
+				</div>
+				<div class="img5 ani pa" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<img id="img2" th:src="@{/move_web/public/img/loadError.jpg}" style="width:600px;height:400px;" alt="">
+				</div>
+			</div>
+		</a>
+		<a class="swiper-slide slide4" href="#">
+			<div class="w1200">
+				<div shiro:user="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div id="playBtn3" class="pa btn" onclick="window.open('/','_self');">立即播放</div>
+				</div>
+				<div shiro:guest="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div class="pa btn" onclick="warning('请先登录')">立即播放</div>
+				</div>
+				<div class="img5 ani pa" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<img id="img3" th:src="@{/move_web/public/img/loadError.jpg}" style="width:800px;height:400px;" alt="">
+				</div>
+			</div>
+		</a>
+		<a href="#" class="swiper-slide slide2">
+			<div class="w1200">
+				<div shiro:user="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div id="playBtn4" class="pa btn" onclick="window.open('/','_self');">立即播放</div>
+				</div>
+				<div shiro:guest="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div class="pa btn" onclick="warning('请先登录')">立即播放</div>
+				</div>
+				<div class="img5 ani pa" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<img id="img4" th:src="@{/move_web/public/img/loadError.jpg}" style="width:800px;height:400px;" alt="">
+				</div>
+			</div>
+		</a>
+		<a href="#" class="swiper-slide slide2">
+			<div class="w1200">
+				<div shiro:user="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div id="playBtn5" class="pa btn" onclick="window.open('/','_self');">立即播放</div>
+				</div>
+				<div shiro:guest="" class="ani pa sl-left" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<div class="pa btn" onclick="warning('请先登录')">立即播放</div>
+				</div>
+				<div class="img5 ani pa" swiper-animate-effect="fadeInDown" swiper-animate-duration="0.3s">
+					<img id="img5" th:src="@{/move_web/public/img/loadError.jpg}" style="width:800px;height:400px;" alt="">
+				</div>
+			</div>
+		</a>
+	</div>
+	<!-- Add Pagination -->
+	<div class="swiper-pagination swiper-pagination-white"></div>
+	<div class="swiper-nav pa" >
+		<ul class="w1200 clearfix">
+			<li id="g1" class="active">
+
+				<div class="info">
+					<div id="moveName1"></div>
+				</div>
+			</li>
+			<li id="g2">
+
+				<div class="info">
+					<div id="moveName2"></div>
+				</div>
+			</li>
+			<li id="g3">
+
+				<div class="info">
+					<div id="moveName3"></div>
+				</div>
+			</li>
+			<li id="g4">
+
+				<div class="info">
+					<div id="moveName4"></div>
+				</div>
+			</li>
+			<li id="g5">
+				<div class="info">
+					<div id="moveName5"></div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<!--轮播结束-->
+
+<!--展示电影区-->
+<div class="show-move">
+
+</div>
+<!--展示电影区结束-->
+
+<!--尾部区域-->
+<div id="bottom_wrapper">
+	<div id="bottom">
+		<div class="col one_third">
+			<h4>关于我们</h4>
+			<a class="foot-a" href="/toWebIntroduce" >
+				漏网之鱼电影网
+			</a>
+		</div>
+		<div class="col one_third">
+			<h4>主页</h4>
+			<a class="foot-a" href="/" >Home</a>
+		</div>
+
+		<div class="col one_third no_margin_right">
+			<h4>联系我们</h4>
+			<div class="foot-a" >QQ:1245152222</div>
+		</div>
+		<div class="cleaner"></div>
+	</div>
+	<div id="footer_wrapper">
+		<div id="footer">
+			Copyright © 漏网之鱼电影网
+		</div>
+	</div>
+</div>
+<!--尾部区域结束-->
+<script th:src="@{/move_web/public/js/jquery-1.11.0.min.js}"></script>
+
+<!--消息提示弹出js-->
+<script type="text/javascript" th:src="@{/move_web/tips/fy-alert/js/fy-alert.js}"></script>
+<script type="text/javascript" th:src="@{/move_web/tips/js/tips.js}"></script>
+<!--end 消息提示弹出js-->
+
+<!--轮播js-->
+<script th:src="@{/move_web/index/js/swiper.min.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/move_web/index/js/swiper.animate.min.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/move_web/index/js/main.js}" type="text/javascript" charset="utf-8"></script>
+<!--end 轮播js-->
+
+
+
+<!--登录注册js-->
+<script th:src="@{/move_web/index/js/index.js}"></script>
+<!--end 登录注册js-->
+
+
+
+</body>
+
+</html>

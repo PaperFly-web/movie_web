@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paperfly.system.mapper.MoveMapper">
+    <insert id="insert" parameterType="Move">
+        insert into move_web.move( m_false_save_path,m_false_pic_save_path,m_size, user_id, m_hot, m_save_path, m_direct,
+                                   m_story, m_area, m_type, m_main_role,
+                                   m_public_time, m_pic_save_path, m_duration,
+                                   m_name, m_create_time)
+        VALUES (#{mFalseSavePath},#{mFalsePicSavePath},#{mSize},#{userId},#{mHot},#{mSavePath},#{mDirect},
+                #{mStory},#{mArea},#{mType},#{mMainRole},#{mPublicTime},#{mPicSavePath},
+                #{mDuration},#{mName},#{mCreateTime})
+    </insert>
+    <select id="selectMoves" parameterType="Move" resultMap="selectMovesMap">
+        select move.*,user.user_name from move_web.move,move_web.user
+        where m_is_pass='1' and move.user_id=user.user_id
+        order by m_hot desc,move.m_create_time desc
+        limit #{page} ,12
+    </select>
+    <select id="selectMyselfMoves" parameterType="Move" resultMap="selectMovesMap">
+        select move.*,user.user_name from move_web.move,move_web.user
+        where move.user_id=#{userId} and move.user_id=user.user_id
+        order by move.m_create_time desc,m_hot desc
+        limit #{page} ,12
+    </select>
+    <delete id="deleteMoves" parameterType="list" >
+        delete  from move_web.move where m_id in
+        <foreach collection="list"  item="move" open="(" close=")" separator=",">
+            #{move.mId}
+        </foreach>
+        and user_id=#{list[0].userId}
+    </delete>
+    <update id="updateMoveHot" parameterType="View">
+        call view_move_history(#{mId},#{userId},#{vCreateTime})
+    </update>
+    <select id="selectMovesByTime" parameterType="Move" resultMap="selectMovesMap">
+        select move.*,user.user_name from move_web.move,move_web.user
+        where m_is_pass='1' and move.user_id=user.user_id
+        order by m_public_time desc,move.m_create_time desc,m_hot desc
+        limit #{page} ,12
+    </select>
+    <select id="selectMovesByHot" parameterType="Move" resultMap="selectMovesMap">
+        select move.*,user.user_name from move_web.move,move_web.user
+        where m_is_pass='1' and move.user_id=user.user_id
+        order by move.m_hot desc,m_public_time desc
+        limit #{page} ,12
+    </select>
+    <select id="findMoveByKeyWords" resultMap="selectMovesMap">
+        call find_movie_by_keywords(#{keyWords},#{page})
+    </select>
+    <resultMap id="selectMovesMap" type="Move">
+        <id column="m_id" property="mId"/>
+        <result column="m_false_save_path" property="mFalseSavePath"/>
+        <result column="m_false_pic_save_path" property="mFalsePicSavePath"/>
+        <result column="m_is_pass" property="mIsPass"/>
+        <result column="m_size" property="mSize"/>
+        <result column="user_id" property="userId"/>
+        <result column="m_hot" property="mHot"/>
+        <result column="m_duration" property="mDuration"/>
+        <result column="m_save_path" property="mSavePath"/>
+        <result column="m_direct" property="mDirect"/>
+        <result column="m_story" property="mStory"/>
+        <result column="m_area" property="mArea"/>
+        <result column="m_type" property="mType"/>
+        <result column="m_main_role" property="mMainRole"/>
+        <result column="m_public_time" property="mPublicTime"/>
+        <result column="m_pic_save_path" property="mPicSavePath"/>
+        <result column="m_name" property="mName"/>
+        <result column="m_create_time" property="mCreateTime"/>
+        <result column="count" property="count"/>
+        <association property="user" javaType="User">
+            <result column="user_name" property="userName"/>
+        </association>
+    </resultMap>
+</mapper>

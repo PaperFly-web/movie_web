@@ -1,0 +1,16 @@
+.search-wrapper .input-holder .search-icon span::before {
+    width: 4px;
+    height: 11px;
+    left: 6px;
+    top: 15px;
+    border-radius: 15px;
+    background: #974BE0;
+}
+
+.nav{
+    background-color: #17274e;
+}
+#bottom_wrapper{
+    position: relative;
+    top: 50px;
+}

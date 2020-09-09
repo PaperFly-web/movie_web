@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta charset="utf-8">
+		<title>漏网之鱼电影网</title>
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		<link th:href="@{/move_web/uploadMove/css/style.css}" rel='stylesheet' type='text/css' media="all" />
+		<link th:href="@{/move_web/uploadMove/css/wickedpicker.css}" rel="stylesheet" type='text/css' media="all" />
+		<link rel="stylesheet" type="text/css" th:href="@{/move_web/uploadMove/css/uploadMove.css}"/>
+		<script type="text/javascript" th:src="@{/move_web/uploadMove/js/jquery-2.1.4.min.js}"></script>
+		<!--导航栏css-->
+		<link rel="stylesheet" type="text/css" th:href="@{/move_web/public/css/nav.css}" />
+		<!-- end 导航栏css-->
+		<!--搜索css-->
+		<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/search-form.css}">
+		<!--end 搜素css-->
+		<!--页尾css-->
+		<link th:href="@{/move_web/public/css/foot.css}" rel='stylesheet' type='text/css' media="all" />
+		<!--end 页尾css-->
+		<!--消息弹出提示css-->
+		<link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/fy-alert/css/fy-alert.css}">
+		<link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/css/demo.css}">
+		<!--end 消息弹出提示css-->
+	</head>
+	<body>
+	<!--后端消息提示区-->
+	<input th:value="${msg.code}" type="hidden" id="backTipsCode" value="111">
+	<input th:value="${msg.message}" type="hidden" id="backTipsMsg" value="111">
+	<!--后端消息提示区结束-->
+	<!--导航开始-->
+	<div class="nav">
+		<div id="menu_hover_bg" style="height: 0px; overflow: hidden;"></div>
+		<div class="w1200">
+			<div class="logo">
+				<a href="/"><img style="width: 65px" th:src="@{/move_web/public/img/logo.png}" /></a>
+			</div>
+			<div class="menu">
+				<ul>
+					<li>
+						<h2><a href="/">首页</a></h2>
+					</li>
+					<li>
+						<h2><a href="/toWebIntroduce" target="_self">关于我们</a></h2>
+					</li>
+					<li>
+						<!-- 搜索 -->
+						<section class="container">
+							<form onsubmit="submitFn(this, event);">
+								<div class="search-wrapper">
+									<div class="input-holder">
+										<input type="text" class="search-input" placeholder="请输入搜索内容" />
+										<button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+									</div>
+									<span class="close" onclick="searchToggle(this, event);"></span>
+									<div class="result-container"></div>
+								</div>
+							</form>
+						</section>
+
+						<!--搜索js-->
+						<script type="text/javascript">
+                            function searchToggle(obj, evt){
+                                var container = $(obj).closest('.search-wrapper');
+
+                                if(!container.hasClass('active')){
+                                    container.addClass('active');
+                                    evt.preventDefault();
+                                }
+                                else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+                                    container.removeClass('active');
+                                    // clear input
+                                    container.find('.search-input').val('');
+                                    // clear and hide result container when we press close
+                                    container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+                                }
+                            }
+
+                            function submitFn(obj, evt){
+                                value = $(obj).find('.search-input').val().trim();
+                                _html = "搜索:"+value;
+
+                                if(!value.length){
+                                    _html = "输入不能为空哦！";
+                                }
+                                else{
+                                    _html += "<b>" + value + "</b>";
+                                    window.open("/findMoveByKeyWords?keyWords="+value+"&page=0",'_self')
+                                }
+
+                                $(obj).find('.result-container').html('<span>' + _html + '</span>');
+                                $(obj).find('.result-container').fadeIn(100);
+
+                                evt.preventDefault();
+                            }
+						</script>
+						<!--搜索js结束-->
+						<!--搜索结束-->
+					</li>
+				</ul>
+			</div>
+			<div class="login" shiro:guest="">
+				<a href="#" onClick="openme()">登录/注册</a>
+			</div>
+			<div class="logout" shiro:user="">
+				<a href="/logout" >退出</a>
+			</div>
+			<div class="login" shiro:user="">
+				<a href="/toUserInfo" >个人信息</a>
+			</div>
+		</div>
+	</div>
+	<!--导航结束-->
+
+	<!--主体开始-->
+	<div class="w3-banner-main">
+		<div class="center-container">
+			<h1 class="header-w3ls">upload your movie</h1>
+			<div class="content-top">
+				<div class="content-w3ls">
+					<form action="/uploadMove" enctype="multipart/form-data" method="post"><!-- form 在这里 -->
+						<div class="form-w3ls">
+							<div class="content-wthree1">
+								<div class="grid-agileits1">
+									<div class="form-control">
+										<label class="header">电影名称</label>
+										<input type="text" class="word" name="mName" placeholder="" title="请输入电影名称" required="">
+									</div>
+									<div class="form-control">
+										<label class="header">主演</label>
+										<input type="text" class="word" name="mMainRole" placeholder="" title="请输入主演" required="">
+									</div>
+									<div class="form-control">
+										<label class="header">电影公映时间</label>
+										<input  id="datepicker1" name="mPublicTime" type="date" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
+									</div>
+									<div class="form-control">
+										<label class="header">分类</label>
+										<select name="mType">
+											<option value="喜剧">喜剧</option>
+											<option value="惊悚">惊悚</option>
+											<option value="动作">动作</option>
+											<option value="悬疑">悬疑</option>
+											<option value="爱情">爱情</option>
+											<option value="科幻">科幻</option>
+											<option value="犯罪">犯罪</option>
+										</select><br/>
+									</div>
+									<div class="form-control">
+										<label class="header">地区</label>
+										<select name="mArea">
+											<option value="内地">内地</option>
+											<option value="香港">香港</option>
+											<option value="韩国">韩国</option>
+											<option value="日本">日本</option>
+											<option value="欧美">欧美</option>
+											<option value="其他">其他</option>
+										</select><br/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-w3ls-1">
+							<div class="form-control">
+								<label class="header">导演</label>
+								<input type="text" class="word" name="mDirect" placeholder="" title="请输入导演" required="">
+							</div>
+							<div class="form-control Insurance">
+								<label class="header">故事情节</label>
+								<textarea  name="mStory" placeholder="" title="请输入故事情节" required=""></textarea>
+							</div>
+							<div class="form-control">
+								<label class="header">选择电影文件（仅支持MP4格式）：</label>
+								<input type="file" name="file" accept=".mp4">
+							</div>
+							<div class="form-control">
+								<label class="header">选择封面（支持jpg、png格式）：</label>
+								<input type="file" name="pic" accept=".jpeg,.jpg,.png">
+							</div>
+							<br><br>
+							<input type="submit"  id="movieSubmit" value="提 交">
+
+						</div>
+					</form>
+					<div class="clear"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!--主体结束-->
+	<!--尾部区域-->
+	<div id="bottom_wrapper">
+		<div id="bottom">
+			<div class="col one_third">
+				<h4>关于我们</h4>
+				<a class="foot-a" href="/toWebIntroduce" >
+					漏网之鱼电影网
+				</a>
+			</div>
+			<div class="col one_third">
+				<h4>主页</h4>
+				<a class="foot-a" href="/" >Home</a>
+			</div>
+
+			<div class="col one_third no_margin_right">
+				<h4>联系我们</h4>
+				<div class="foot-a" >QQ:1245152222</div>
+			</div>
+			<div class="cleaner"></div>
+		</div>
+		<div id="footer_wrapper">
+			<div id="footer">
+				Copyright © 漏网之鱼电影网
+			</div>
+		</div>
+	</div>
+	<!--尾部区域结束-->
+	<link rel="stylesheet" th:href="@{/move_web/uploadMove/css/jquery-ui.css}" />
+	<script th:src="@{/move_web/uploadMove/js/jquery-ui.js}"></script>
+
+	<script type="text/javascript" th:src="@{/move_web/uploadMove/js/wickedpicker.js}"></script>
+	<script type="text/javascript">
+        $('.timepicker').wickedpicker({twentyFour: false});
+	</script>
+	<script th:src="@{/move_web/public/js/jquery-1.11.0.min.js}"></script>
+	<!--消息提示弹出js-->
+	<script type="text/javascript" th:src="@{/move_web/tips/fy-alert/js/fy-alert.js}"></script>
+	<script type="text/javascript" th:src="@{/move_web/tips/js/tips.js}"></script>
+	<!--end 消息提示弹出js-->
+	<script type="text/javascript" th:src="@{/move_web/uploadMove/js/uploadMovie.js}"></script>
+	</body>
+</html>

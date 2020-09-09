@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<title>漏网之鱼电影网</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Colored video player template Responsive, Login form web template,Flat Pricing tables,Flat Drop downs  Sign up Web Templates, Flat Web Templates, Login sign up Responsive web template, SmartPhone Compatible web template, free Web designs for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+
+	<!--导航栏css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/public/css/nav.css}" />
+	<!-- end 导航栏css-->
+
+	<!--搜索css-->
+	<link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/search-form.css}">
+	<!--end 搜素css-->
+
+	<!--页尾css-->
+	<link th:href="@{/move_web/public/css/foot.css}" rel='stylesheet' type='text/css' media="all" />
+	<!--end 页尾css-->
+	<link th:href="@{/move_web/showMove/css/style.css}" rel="stylesheet" type="text/css" media="all"/>
+
+</head>
+<body>
+	<!--导航开始-->
+	<div class="nav">
+		<div id="menu_hover_bg" style="height: 0px; overflow: hidden;"></div>
+		<div class="w1200">
+			<div class="logo">
+				<a href="/"><img style="width: 65px" th:src="@{/move_web/public/img/logo.png}" /></a>
+			</div>
+			<div class="menu">
+				<ul>
+					<li>
+						<h2><a href="/">首页</a></h2>
+					</li>
+					<li>
+						<h2><a href="/toWebIntroduce" target="_self">关于我们</a></h2>
+					</li>
+					<li>
+						<h2><a href="/toUploadMove" target="_self" shiro:user="">上传影视</a></h2>
+					</li>
+					<li>
+						<!-- 搜索 -->
+						<section class="container">
+							<form onsubmit="submitFn(this, event);">
+								<div class="search-wrapper">
+									<div class="input-holder">
+										<input type="text" class="search-input" placeholder="请输入搜索内容" />
+										<button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+									</div>
+									<span class="close" onclick="searchToggle(this, event);"></span>
+									<div class="result-container"></div>
+								</div>
+							</form>
+						</section>
+
+						<!--搜索js-->
+						<script type="text/javascript">
+                            function searchToggle(obj, evt){
+                                var container = $(obj).closest('.search-wrapper');
+
+                                if(!container.hasClass('active')){
+                                    container.addClass('active');
+                                    evt.preventDefault();
+                                }
+                                else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+                                    container.removeClass('active');
+                                    // clear input
+                                    container.find('.search-input').val('');
+                                    // clear and hide result container when we press close
+                                    container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+                                }
+                            }
+
+                            function submitFn(obj, evt){
+                                value = $(obj).find('.search-input').val().trim();
+                                _html = "搜索:"+value;
+
+                                if(!value.length){
+                                    _html = "输入不能为空哦！";
+                                }
+                                else{
+                                    _html += "<b>" + value + "</b>";
+                                    window.open("/findMoveByKeyWords?keyWords="+value+"&page=0",'_self')
+                                }
+
+                                $(obj).find('.result-container').html('<span>' + _html + '</span>');
+                                $(obj).find('.result-container').fadeIn(100);
+
+                                evt.preventDefault();
+                            }
+						</script>
+						<!--搜索js结束-->
+
+						<!--搜索结束-->
+					</li>
+				</ul>
+			</div>
+			<div class="logout" shiro:user="">
+				<a href="/logout" >退出</a>
+			</div>
+			<div class="login" shiro:user="">
+				<a href="/toUserInfo" >个人信息</a>
+			</div>
+		</div>
+	</div>
+	<!--导航结束-->
+	<!-- agileits-main -->
+	<div class="agileits-main">
+		<h1 class="agileits-w3layouts" th:if="${msg.code==200}"  th:text="${move.mName}"></h1>
+		<h1 class="agileits-w3layouts" th:if="${msg.code!=200}"  >ERRO VIDEO</h1>
+		<div class="wthree-row w3-agile">
+			<div id="videoContainer">
+				<div class="overlay">
+					<div class="button agileinfo"></div>
+				</div>
+				<div id="video" >
+					<video th:if="${msg.code==200}" th:src="${move.mFalseSavePath}"></video>
+					<video th:if="${msg.code!=200}" src="move_web/showMove/video/ERROR.mp4"></video>
+					<p >您的浏览器不支持播放这个视频</p>
+
+				</div>
+				<div id="controls">
+					<div class="playButton">
+						<div class="playPause"></div>
+					</div>
+					<div class="ProgressContainer">
+						<div class="timer intialTime"> 00:00 </div>
+						<div class="progressBar">
+							<div class="progress"></div>
+						</div>
+						<div class="time"> 00:00 </div>
+						<div class="timer fullTime"> 00:00 </div>
+					</div>
+					<div class="volume">
+						<div class="icon"></div>
+						<div class="intensityBar">
+							<div class="intensity"></div>
+						</div>
+					</div>
+					<div class="scale">
+						<div class="icon"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>	
+	</div>
+
+	<!--尾部区域-->
+	<div id="bottom_wrapper">
+		<div id="bottom">
+			<div class="col one_third">
+				<h4>关于我们</h4>
+				<a class="foot-a" href="/toWebIntroduce" >
+					漏网之鱼电影网
+				</a>
+			</div>
+			<div class="col one_third">
+				<h4>主页</h4>
+				<a class="foot-a" href="/" >Home</a>
+			</div>
+
+			<div class="col one_third no_margin_right">
+				<h4>联系我们</h4>
+				<div class="foot-a" >QQ:1245152222</div>
+			</div>
+			<div class="cleaner"></div>
+		</div>
+		<div id="footer_wrapper">
+			<div id="footer">
+				Copyright © 漏网之鱼电影网
+			</div>
+		</div>
+	</div>
+	<!--尾部区域结束-->
+	<!-- //copyright -->
+	<script th:src="@{/move_web/public/js/jquery-3.1.0.min.js}"></script>
+	<script th:src="@{/move_web/showMove/js/showVideo.js}"></script>
+</body>
+</html>

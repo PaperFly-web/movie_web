@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paperfly.admin.mapper.AdminMovieMapper">
+    <delete id="deleteMoves" parameterType="list">
+        delete  from move_web.move where m_id in
+        <foreach collection="list"  item="move" open="(" close=")" separator=",">
+            #{move.mId}
+        </foreach>
+    </delete>
+    <select id="selectMovieWebData" resultType="MovieWebData">
+        SELECT (SELECT count(*)  FROM user WHERE DATEDIFF(user_create_time,NOW())=-1) last_regist_count,
+               (SELECT count(*)  FROM user WHERE DATEDIFF(user_last_login_time,NOW())=0) today_user_login_count,
+               (SELECT count(*)  FROM user ) user_count,
+               (SELECT count(*)  FROM move WHERE DATEDIFF(m_create_time,NOW())=-1) last_movie_count,
+               (SELECT count(*)  FROM move WHERE m_is_pass='1') pass_movie_count,
+               (SELECT count(*)  FROM move WHERE m_is_pass='0') no_pass_movie_count,
+               (SELECT count(*)  FROM move ) movie_count
+    </select>
+    <select id="selectMovie" resultMap="selectMovesMap">
+        select move.*,user.user_name from move_web.move,move_web.user
+        where m_is_pass=#{isPass} and move.user_id=user.user_id
+        order by move.m_create_time desc,m_hot desc
+        limit #{page} ,12
+    </select>
+    <resultMap id="selectMovesMap" type="Move">
+        <id column="m_id" property="mId"/>
+        <result column="m_false_save_path" property="mFalseSavePath"/>
+        <result column="m_false_pic_save_path" property="mFalsePicSavePath"/>
+        <result column="m_is_pass" property="mIsPass"/>
+        <result column="m_size" property="mSize"/>
+        <result column="user_id" property="userId"/>
+        <result column="m_hot" property="mHot"/>
+        <result column="m_save_path" property="mSavePath"/>
+        <result column="m_direct" property="mDirect"/>
+        <result column="m_story" property="mStory"/>
+        <result column="m_area" property="mArea"/>
+        <result column="m_type" property="mType"/>
+        <result column="m_main_role" property="mMainRole"/>
+        <result column="m_public_time" property="mPublicTime"/>
+        <result column="m_pic_save_path" property="mPicSavePath"/>
+        <result column="m_name" property="mName"/>
+        <result column="m_duration" property="mDuration"/>
+        <result column="m_create_time" property="mCreateTime"/>
+        <result column="count" property="count"/>
+        <association property="user" javaType="User">
+            <result column="user_name" property="userName"/>
+        </association>
+    </resultMap>
+</mapper>

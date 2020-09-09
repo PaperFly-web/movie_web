@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>漏网之鱼电影网</title>
+<!--meta tags -->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="Stamp error page Widget a Flat Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements" />
+<!-- Meta tag Keywords -->
+<link rel="stylesheet" th:href="@{/move_web/error/css/style.css}" type="text/css" media="all" /> <!-- Style-CSS -->
+<link href="//fonts.googleapis.com/css?family=Slabo+27px&amp;subset=latin-ext" rel="stylesheet">
+<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+</head>
+
+<body>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="main">
+  <h1 th:text="${status}"></h1>
+  <p>
+    出现了某些错误<br/>That's a trouble?</p>
+  <button type="button"><a th:href="@{/}">返回主页</a></button>
+      <div class="copyright">
+                <p>© move_web </p>
+      </div>
+  </div>
+</body>
+
+</html>

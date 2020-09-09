@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paperfly.system.mapper.SuggestMapper">
+    <insert id="insert" parameterType="Suggest">
+        insert into move_web.suggest( succ_user_name, succ_phone, succ_create_time, succ_content)
+        values (#{succUserName},#{succPhone},#{succCreateTime},#{succContent})
+    </insert>
+    <select id="selectSuggest" resultType="Suggest">
+        select *
+        from move_web.suggest
+        order by move_web.suggest.succ_create_time desc
+        limit #{page},6
+    </select>
+</mapper>

@@ -1,0 +1,385 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>漏网之鱼电影网</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/move_web/webIntroduce/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="/move_web/webIntroduce/css/gallery.css" rel="stylesheet" type="text/css" media="all" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+<!--消息弹出提示css-->
+<link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/fy-alert/css/fy-alert.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/css/demo.css}">
+<!--end 消息弹出提示css-->
+<script src="move_web/webIntroduce/js/jquery.min.js"></script>
+<script src="/move_web/webIntroduce/js/hover_pack.js"></script>
+<script type="text/javascript" src="/move_web/webIntroduce/js/move-top.js"></script>
+<script type="text/javascript" src="/move_web/webIntroduce/js/easing.js"></script>
+   <script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event){		
+				event.preventDefault();
+				$('html,body').animate({scrollTop:$(this.hash).offset().top},1200);
+			});
+		});
+	</script>
+	<script type="text/javascript" src="/move_web/webIntroduce/js/jquery.mixitup.min.js"></script>
+	<!--消息提示弹出js-->
+	<script type="text/javascript" th:src="@{/move_web/tips/fy-alert/js/fy-alert.js}"></script>
+	<script type="text/javascript" th:src="@{/move_web/tips/js/tips.js}"></script>
+	<!--end 消息提示弹出js-->
+	<script type="text/javascript">
+	$(function () {
+		
+		var filterList = {
+		
+			init: function () {
+			
+				// MixItUp plugin
+				// http://mixitup.io
+				$('#portfoliolist').mixitup({
+					targetSelector: '.portfolio',
+					filterSelector: '.filter',
+					effects: ['fade'],
+					easing: 'snap',
+					// call the hover effect
+					onMixEnd: filterList.hoverEffect()
+				});				
+			
+			},
+			
+			hoverEffect: function () {
+			
+				// Simple parallax effect
+				$('#portfoliolist .portfolio').hover(
+					function () {
+						$(this).find('.label').stop().animate({bottom: 0}, 200, 'easeOutQuad');
+						$(this).find('img').stop().animate({top: -30}, 500, 'easeOutQuad');				
+					},
+					function () {
+						$(this).find('.label').stop().animate({bottom: -40}, 200, 'easeInQuad');
+						$(this).find('img').stop().animate({top: 0}, 300, 'easeOutQuad');								
+					}		
+				);				
+			
+			}
+
+		};
+		
+		// Run the show!
+		filterList.init();
+		
+		
+	});	
+	</script>
+
+</head>
+<body>
+<!--后端消息提示区-->
+<!--方便提示是否查询到电影,在登录注册的index.js中使用-->
+<div th:if="${msg==null}">
+	<input  type="hidden" class="backTipsCode" value="111">
+	<input  type="hidden" class="backTipsMsg" value="111">
+</div>
+<div th:if="${msg!=null}">
+	<input th:value="${msg.code}" type="hidden" class="backTipsCode" value="111">
+	<input th:value="${msg.message}" type="hidden" class="backTipsMsg" value="111">
+</div>
+     <div class="header-top">
+  	    <div class="wrap">
+	  		<div class="logo">
+				<ul>
+					<li><a href="/"><img style="width: 65px" src="/move_web/public/img/logo.png" alt=""></a></li> &nbsp;&nbsp;&nbsp;
+					<li class="line"> | &nbsp;&nbsp;&nbsp;漏网之鱼电影网</li>
+					<div class="clear"> </div>
+				</ul>
+			</div>
+	  		<div class="menu">
+				<a class="toggleMenu" href="#"><img src="/move_web/webIntroduce/images/nav_icon.png" alt="" /> </a>
+				<ul class="nav" id="nav">
+				  <li class="current"><a href="/">主页</a></li>
+
+				  <div class="clear"></div>
+				</ul>
+				<script type="text/javascript" src="/move_web/webIntroduce/js/responsive-nav.js"></script>
+			</div>							
+	  		<div class="clear"></div>
+	  	</div>
+	  </div>
+	  <div class="slider_left" id="home"> 
+		   	<div class="wmuSlider example1">
+			   <div class="wmuSliderWrapper">
+				   <article style="position: absolute; width: 100%; opacity: 0;"> 
+				   	<div class="slider_text">
+				   	  <h1>遇见 <span class="head">漏网之鱼</span></h1>
+				   	  <h2><span class="green">/碰撞</span> 不一样的火花.</h2>
+				   	  <div class="m_1"><span class="left_line"> </span> <p>We are a team of professionals</p><span class="right_line"> </span></div>
+		            </div>
+				   </article>
+				   <article style="position: relative; width: 100%; opacity: 1;"> 
+				   	<div class="slider_text">
+				   	  <h1>加入<span class="head"> 漏网之鱼</span></h1>
+				   	  <h2><span class="green">/拥有</span> 整个世界.</h2>
+				   	  <div class="m_1"><span class="left_line"> </span> <p>We are a team of professionals</p><span class="right_line"> </span></div>
+		            </div>
+				   </article>
+				 </div>
+                <ul class="wmuSliderPagination">
+                	<li><a href="#" class="">1</a></li>
+                	<li><a href="#" class="">2</a></li>
+                </ul>
+             </div>
+            	 <script src="/move_web/webIntroduce/js/jquery.wmuSlider.js"></script>
+				       <script>
+       						 $('.example1').wmuSlider();         
+   						</script> 	
+   	    </div>     
+   	    <div class="test-monials-grids" id="features">
+	       <div class="wrap">
+			<h3 class="m_2">漏网之鱼的特点</h3>
+			<div class="m_3"><span class="left_line1"> </span><img src="/move_web/webIntroduce/images/heart.png" alt=""/><span class="right_line1"> </span></div>
+			  <div class="gallery autoplay items-3">
+			    <div id="item-1" class="control-operator"></div>
+			    <div id="item-2" class="control-operator"></div>
+			    <div id="item-3" class="control-operator"></div>
+				<figure class="item">
+			         <div class="box1">
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="feather"> </i>
+										<div class="desc">
+											<h4>年轻的团队</h4>
+											<p>我们的团队都拥有绝美的面容,黑亮垂直的发，斜飞的英挺剑眉，细长蕴藏着锐利的黑眸，削薄轻抿的唇，棱角分明的轮廓，修长高大却不粗犷的身材，宛若黑夜中的鹰，冷傲孤清却又盛气逼人，孑然独立间散发的是傲视天地的强势。</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="pencil"> </i>
+										<div class="desc">
+											<h4>丰富的资源</h4>
+											<p>不论你想看的还是不想看的，我们都有</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="megaphone"> </i>
+										<div class="desc">
+											<h4>炫酷的UI</h4>
+											<p>在哪看电影都是看，那为什么要选中我们呢？因为我们无广告，无陷阱，不欺诈用户。而且还有炫酷的UI余交互体验</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="clear"></div>
+						</div>
+			    </figure>
+				<figure class="item">
+			      <div class="box1">
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="megaphone"> </i>
+										<div class="desc">
+											<h4>丰富的资源</h4>
+											<p>不论你想看的还是不想看的，我们都有</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="feather"> </i>
+										<div class="desc">
+											<h4>炫酷的UI</h4>
+											<p>在哪看电影都是看，那为什么要选中我们呢？因为我们无广告，无陷阱，不欺诈用户。而且还有炫酷的UI余交互体验</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="pencil"> </i>
+										<div class="desc">
+											<h4>年轻的团队</h4>
+											<p>我们的团队都拥有绝美的面容,黑亮垂直的发，斜飞的英挺剑眉，细长蕴藏着锐利的黑眸，削薄轻抿的唇，棱角分明的轮廓，修长高大却不粗犷的身材，宛若黑夜中的鹰，冷傲孤清却又盛气逼人，孑然独立间散发的是傲视天地的强势。</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="clear"></div>
+						</div>
+			    </figure>
+				<figure class="item">
+			      <div class="box1">
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="pencil"> </i>
+										<div class="desc">
+											<h4>炫酷的UI</h4>
+											<p>在哪看电影都是看，那为什么要选中我们呢？因为我们无广告，无陷阱，不欺诈用户。而且还有炫酷的UI余交互体验</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="megaphone"> </i>
+										<div class="desc">
+											<h4>年轻的团队</h4>
+											<p>我们的团队都拥有绝美的面容,黑亮垂直的发，斜飞的英挺剑眉，细长蕴藏着锐利的黑眸，削薄轻抿的唇，棱角分明的轮廓，修长高大却不粗犷的身材，宛若黑夜中的鹰，冷傲孤清却又盛气逼人，孑然独立间散发的是傲视天地的强势。</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="col_1_of_3 span_1_of_3">
+								<ul class="icon1">
+									<li><i class="feather"> </i>
+										<div class="desc">
+											<h4>丰富的资源</h4>
+											<p>不论你想看的还是不想看的，我们都有</p>
+										</div>
+										<div class="clear"></div>
+									</li>
+								</ul>
+							</div>
+							<div class="clear"></div>
+						</div>
+			    </figure>
+				<div class="controls">
+			      <a href="#item-1" class="control-button"> </a>
+			      <a href="#item-2" class="control-button"> </a>
+			      <a href="#item-3" class="control-button"> </a>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	<div class="team" id="team">
+	   <h3 class="m_2">我们的团队</h3>
+	  <div class="wrap">
+		 <div class="gallery items-3">
+		    <div id="no-autoplay-1" class="control-operator"></div>
+		    <div id="no-autoplay-2" class="control-operator"></div>
+		    <div id="no-autoplay-3" class="control-operator"></div>
+		    <figure class="item">
+		         <div class="team_box">
+						<div class="col_1_of_4 span_1_of_4"><a href="#">
+						   <div class="view view-fifth">
+		                    <img src="/move_web/webIntroduce/images/pic10.jpg" />
+		                   </div>
+		                   </a> 
+						  <div class="clear"></div>
+						  <div class="grid_desc">
+		                    	<h4><a href="#">彭于晏</a></h4>
+		                    	<p>为代码疯狂</p>
+		                    </div>
+						</div>
+						<div class="col_1_of_4 span_1_of_4"><a href="#">
+						   <div class="view view-fifth">
+		                    <img src="/move_web/webIntroduce/images/pic11.jpg" />
+
+		                   </div>
+						  </a> 
+						  <div class="clear"></div>
+						  <div class="grid_desc">
+		                    	<h4><a href="#">周树人</a></h4>
+		                    	<p>弃艺从计</p>
+		                    </div>
+						</div>
+						<div class="col_1_of_4 span_1_of_4"><a href="#">
+						   <div class="view view-fifth">
+		                    <img src="/move_web/webIntroduce/images/pic13.jpg" />
+		                   </div>
+						  </a> 
+						  <div class="clear"></div>
+						  <div class="grid_desc">
+		                    	<h4><a href="#">武则天</a></h4>
+		                    	<p>代码强国</p>
+		                    </div>
+						</div>
+						<div class="col_1_of_4 span_1_of_4"><a href="#">
+						   <div class="view view-fifth">
+		                    <img src="/move_web/webIntroduce/images/pic14.jpg" />
+		                   </div>
+						  </a> 
+						  <div class="clear"></div>
+						  <div class="grid_desc">
+		                    	<h4><a href="#">花木兰</a></h4>
+		                    	<p>缺 new male()</p>
+		                    </div>
+						</div>
+						<div class="clear"></div>
+				   </div>
+		    </figure>
+		   </div>
+	      </div>
+        </div>
+    <div class="footer-top" id="contact">
+	  <div class="wrap">
+	   <h3 class="m_2">提交建议</h3>
+	  <p class="m_5">参与网站建设,让网站走的更长远,也让你的观影更爽</p>
+	   <div class="project">
+
+		    <div class="cont span_2_of_2">
+		       <h4 class="m_9">填写建议</h4>
+				<form action="/insertSuggest" method="post">
+					 <div class="contact-form">
+						<div class="contact-to">
+							<input type="text" class="text" placeholder="昵称" name="succUserName" required>
+							<input type="text" class="text" placeholder="手机号" name="succPhone" required style="margin-left:30px">
+							<input type="text" class="text" placeholder="建议信息" name="succContent" required >
+						</div>
+						<span><input type="submit" class="" value="提交建议"></span>
+						<div class="clear"></div>
+					 </div>
+				</form>
+		   </div>
+		    <div class="clear"></div>
+		   </div>
+	  </div>
+   </div>
+   <div class="footer-bottom">
+	  <div class="wrap">
+		<div class="section group">
+				<div class="col_1_of_5 span_1_of_5">
+					<div class="copy">
+		             <p>© 2020 <a href="/" target="_blank"> 漏网之鱼</a></p>
+		           </div>
+				</div>
+				<div class="clear"></div>
+	  		</div>
+	   </div>
+   </div>
+   <script type="text/javascript">
+			$(document).ready(function() {
+			
+				var defaults = {
+		  			containerID: 'toTop', // fading element id
+					containerHoverID: 'toTopHover', // fading element hover id
+					scrollSpeed: 1200,
+					easingType: 'linear' 
+		 		};
+				
+				
+				$().UItoTop({ easingType: 'easeOutQuart' });
+				
+			});
+		</script>
+        <a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"></span></a>
+	      <script src="/move_web/webIntroduce/js/jquery.scrollTo.js"></script>
+	  <script>
+
+	</script>
+<script type="text/javascript" th:src="@{/move_web/webIntroduce/js/webIntroduce.js}"></script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<meta charset="UTF-8">
+<title>漏网之鱼电影网</title>
+  <script th:src="@{/move_web/public/js/jquery-1.11.0.min.js}"></script>
+  <!--分页css-->
+  <link rel="stylesheet" th:href="@{/move_web/public/page/css/jquery.pagination.css}" />
+  <link rel="stylesheet" th:href="@{/move_web/public/page/css/page.css}" />
+  <!--分页css end-->
+
+  <!--导航栏css-->
+  <link rel="stylesheet" type="text/css" th:href="@{/move_web/public/css/nav.css}" />
+  <!-- end 导航栏css-->
+
+  <!--电影详情css-->
+  <link rel="stylesheet" type="text/css" th:href="@{/move_web/movieDetail/css/style.css}"/>
+  <!--end 电影详情css-->
+
+    <!--注册登录css-->
+    <link th:href="@{/move_web/index/css/style.css}" rel='stylesheet' type='text/css' media="all" />
+    <!--end 注册登录css-->
+
+  <!--消息弹出提示css-->
+  <link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/fy-alert/css/fy-alert.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/move_web/tips/css/demo.css}">
+  <!--end 消息弹出提示css-->
+
+  <!--搜索css-->
+  <link rel="stylesheet" type="text/css" th:href="@{/move_web/index/css/search-form.css}">
+  <!--end 搜素css-->
+
+  <!--页尾css-->
+  <link th:href="@{/move_web/public/css/foot.css}" rel='stylesheet' type='text/css' media="all" />
+  <!--end 页尾css-->
+
+  <!--电影详情自己页面css-->
+  <link th:href="@{/move_web/movieDetail/css/movieDetail.css}" rel='stylesheet' type='text/css' media="all" />
+  <!--end 电影详情自己页面css-->
+
+
+</head>
+<body>
+<!--后端消息提示区开始-->
+  <!--方便提示是否查询到电影,在登录注册的index.js中使用-->
+  <div th:if="${msg==null}">
+    <input  type="hidden" class="backTipsCode" value="111">
+    <input  type="hidden" class="backTipsMsg" value="111">
+  </div>
+  <div th:if="${msg!=null}">
+    <input th:value="${msg.code}" type="hidden" class="backTipsCode" value="111">
+    <input th:value="${msg.message}" type="hidden" class="backTipsMsg" value="111">
+  </div>
+<!--后端消息提示区结束-->
+
+
+  <!--登录注册开始-->
+  <div id="div1">
+
+  </div>
+  <div id="div2">
+      <div class="form-w3ls">
+          <input type="button" value="ｘ" onClick="closeme()" style="cursor: hand;float: right;">
+          <div class="form-head-w3l">
+              <h2>S</h2>
+          </div>
+          <div class="alert alert-warning" role="alert">
+              <span id="alertMsg"  style="color: #f5d8cc"></span>
+          </div>
+          <ul class="tab-group cl-effect-4">
+              <li class="tab active"><a href="#signin-agile">登录</a></li>
+              <li class="tab"><a href="#signup-agile">注册</a></li>
+          </ul>
+          <div class="tab-content">
+              <div id="signin-agile">
+                  <form action="/login" method="post">
+                      <input type="text" name="userPhone" id="sign-in-no" placeholder="手机号"  required="required">
+                      <input type="password" id="login-pwd" name="userPwd" placeholder="密码"  required="required">
+                      <input type="submit" class="sign-in" value="登录" disabled="disabled">
+                  </form>
+              </div>
+              <div id="signup-agile">
+                  <form action="#" >
+                      <input type="text" id="userName" name="userName" placeholder="用户名"  required="required">
+                      <input type="text" name="userPhone" id="sign-up-no" placeholder="手机号"  required="required">
+                      <input type="password" name="userPwd" id="password" placeholder="密码(至少包含6位字符)"  required="required">
+                      <input type="password" id="re-password"  placeholder="确认密码" required="required">
+                      <input type="button" class="register" value="注册" disabled="disabled" >
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!--登录注册结束-->
+
+  <!--主体开始-->
+  <div class="main-container">
+
+    <!--导航开始-->
+    <div class="nav">
+      <div id="menu_hover_bg" style="height: 0px; overflow: hidden;"></div>
+      <div class="w1200">
+        <div class="logo">
+          <a href="/"><img style="width: 65px" th:src="@{/move_web/public/img/logo.png}" /></a>
+        </div>
+        <div class="menu">
+          <ul>
+            <li>
+              <h2><a href="/">首页</a></h2>
+            </li>
+            <li>
+              <h2><a href="/toWebIntroduce" target="_self">关于我们</a></h2>
+            </li>
+            <li>
+              <h2><a href="/toUploadMove" target="_self" shiro:user="">上传影视</a></h2>
+            </li>
+            <li>
+              <!-- 搜索 -->
+              <section class="container">
+                <form onsubmit="submitFn(this, event);">
+                  <div class="search-wrapper">
+                    <div class="input-holder">
+                      <input type="text" class="search-input" placeholder="请输入搜索内容" />
+                      <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
+                    </div>
+                    <span class="close" onclick="searchToggle(this, event);"></span>
+                    <div class="result-container"></div>
+                  </div>
+                </form>
+              </section>
+
+              <!--搜索js-->
+              <script type="text/javascript">
+                  function searchToggle(obj, evt){
+                      var container = $(obj).closest('.search-wrapper');
+
+                      if(!container.hasClass('active')){
+                          container.addClass('active');
+                          evt.preventDefault();
+                      }
+                      else if(container.hasClass('active') && $(obj).closest('.input-holder').length == 0){
+                          container.removeClass('active');
+                          // clear input
+                          container.find('.search-input').val('');
+                          // clear and hide result container when we press close
+                          container.find('.result-container').fadeOut(100, function(){$(this).empty();});
+                      }
+                  }
+
+                  function submitFn(obj, evt){
+                      value = $(obj).find('.search-input').val().trim();
+                      _html = "搜索:"+value;
+
+                      if(!value.length){
+                          _html = "输入不能为空哦！";
+                      }
+                      else{
+                          _html += "<b>" + value + "</b>";
+                          window.open("/findMoveByKeyWords?keyWords="+value+"&page=0",'_self')
+                      }
+
+                      $(obj).find('.result-container').html('<span>' + _html + '</span>');
+                      $(obj).find('.result-container').fadeIn(100);
+
+                      evt.preventDefault();
+                  }
+              </script>
+              <!--搜索js结束-->
+
+              <!--搜索结束-->
+            </li>
+          </ul>
+        </div>
+        <div class="login" shiro:guest="">
+          <a  onClick="openme()">登录/注册</a>
+        </div>
+        <div class="logout" shiro:user="">
+          <a href="/logout" >退出</a>
+        </div>
+        <div class="login" shiro:user="">
+          <a href="/toUserInfo" >个人信息</a>
+        </div>
+      </div>
+    </div>
+    <!--导航结束-->
+
+    <!--主体开始-->
+    <div class="main">
+      <div class="dy-content" >
+        <div class="dy-videos" style="width: 1340px;">
+          <ul class="dy-video-list">
+            <li th:if="${msg.code==404}" data- class="dy-video-item dy-video-meta-right">
+              <div class="dy-video-meta">
+                <div class="dy-video-meta-bg"> </div>
+                <div class="dy-video-meta-dy">
+                  <h4 class="dy-video-title"> <a> 没有找到资源 </a> </h4>
+                  <span class="dy-video-rating">10.0</span>
+                  <ul class="dy-video-meta-list">
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 主演: </span> <a>漏网之鱼</a> </li>
+                    <li class="dy-video-types"> <span class="dy-video-tip">类型:</span> <span class="dy-video-meta-filter">漏网之鱼</span> </li>
+                    <li class="dy-video-areas">  <span class="dy-video-tip">地区:</span> <span class="dy-video-meta-filter">漏网之鱼</span> </li>
+                    <li class="dy-video-starts">  <span class="dy-video-tip">年代:</span> <span class="dy-video-meta-filter">8848</span> </li>
+                  </ul>
+                  <p class="dy-video-intro"> <a style="color: #136EC3" href="/" class="dy-video-intro-more">漏网之鱼电影网</a> </p>
+                </div>
+                <div class="dy-video-meta-bg"> </div>
+              </div>
+              <div class="dy-video-poster">
+                <img class="dy-video-img" th:src="@{/move_web/public/img/loadError.jpg}" alt="漏网之鱼">
+                <span class="dy-video-complete"></span>
+                <span class="dy-video-date"> 2018 年 </span>
+                <span class="dy-video-bg"></span>
+                </a>
+              </div>
+              <div class="dy-video-primary">
+                <h4 class="dy-video-title"><a> 漏网之鱼 </a> </h4>
+                <span class="dy-video-rating"> 10.0 </span> </div>
+            </li>
+            <li shiro:guest="" th:each="move:${msg.data}" th:if="${msg.code==200||msg.code==201}" data- class="dy-video-item dy-video-meta-right">
+              <div class="dy-video-meta">
+                <div class="dy-video-meta-bg"> </div>
+                <div class="dy-video-meta-dy">
+                  <h4 class="dy-video-title"> <a th:text="${move.mName}">  </a> </h4>
+                  <ul class="dy-video-meta-list">
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 时长: </span> <a th:text="${move.mDuration}"></a> </li>
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 上传视频人: </span> <a th:text="${move.user.userName}"></a> </li>
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 导演: </span> <a th:text="${move.mDirect}"></a> </li>
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 主演: </span> <a th:text="${move.mMainRole}"></a> </li>
+                    <li class="dy-video-types"> <span class="dy-video-tip">类型:</span> <span class="dy-video-meta-filter" th:text="${move.mType}+'&nbsp;'"></span> </li>
+                    <li class="dy-video-areas"> <span class="dy-video-tip">地区:</span> <span class="dy-video-meta-filter" th:text="${move.mArea}"></span> </li>
+                    <li class="dy-video-starts"> <span class="dy-video-tip">年代:</span> <span class="dy-video-meta-filter" th:text="${#dates.format(move.mPublicTime, 'yyyy-MM-dd')}">8848</span> </li>
+                  </ul>
+                  <p class="dy-video-intro" th:text="${move.mStory}">  </p>
+                </div>
+                <div class="dy-video-meta-bg"> </div>
+              </div>
+              <div class="dy-video-poster">
+                <a href="#" onclick="warning('请先登录')" class="dy-video-link">
+                  <img class="dy-video-img" th:src="${move.mFalsePicSavePath}" th:alt="${move.mName}" />
+                  <span class="dy-video-complete"></span>
+                  <span class="dy-video-date" th:text="${#dates.format(move.mPublicTime, 'yyyy-MM-dd')}" > </span>
+                  <span class="dy-video-bg"></span>
+                </a>
+              </div>
+              <div class="dy-video-primary">
+                <h4 class="dy-video-title"><a th:text="${move.mName}">  </a> </h4>
+                <span class="dy-video-rating" th:text="'热度:'+${move.mHot}">  </span> </div>
+            </li>
+            <li shiro:user="" th:each="move:${msg.data}" th:if="${msg.code==200||msg.code==201}" data- class="dy-video-item dy-video-meta-right">
+              <div class="dy-video-meta">
+                <div class="dy-video-meta-bg"> </div>
+                <div class="dy-video-meta-dy">
+                  <h4 class="dy-video-title"> <a th:text="${move.mName}">  </a> </h4>
+                  <ul class="dy-video-meta-list">
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 时长: </span> <a th:text="${move.mDuration}"></a> </li>
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 上传视频人: </span> <a th:text="${move.user.userName}"></a> </li>
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 导演: </span> <a th:text="${move.mDirect}"></a> </li>
+                    <li class="dy-video-actors"> <span class="dy-video-tip"> 主演: </span> <a th:text="${move.mMainRole}"></a> </li>
+                    <li class="dy-video-types"> <span class="dy-video-tip">类型:</span> <span class="dy-video-meta-filter" th:text="${move.mType}+'&nbsp;'"></span> </li>
+                    <li class="dy-video-areas"> <span class="dy-video-tip">地区:</span> <span class="dy-video-meta-filter" th:text="${move.mArea}"></span> </li>
+                    <li class="dy-video-starts"> <span class="dy-video-tip">年代:</span> <span class="dy-video-meta-filter" th:text="${#dates.format(move.mPublicTime, 'yyyy-MM-dd')}">8848</span> </li>
+                  </ul>
+                  <p class="dy-video-intro" th:text="${move.mStory}">  </p>
+                </div>
+                <div class="dy-video-meta-bg"> </div>
+              </div>
+              <div class="dy-video-poster">
+                <a th:href="'/toShowMove?mId='+${move.mId}+'&mName='+${move.mName}+'&mFalseSavePath='+${move.mFalseSavePath}" class="dy-video-link">
+                  <img class="dy-video-img" th:src="${move.mFalsePicSavePath}" th:alt="${move.mName}" />
+                  <span class="dy-video-complete"></span>
+                  <span class="dy-video-date" th:text="${#dates.format(move.mPublicTime, 'yyyy-MM-dd')}"> </span>
+                  <span class="dy-video-bg"></span>
+                </a>
+              </div>
+              <div class="dy-video-primary">
+                <h4 class="dy-video-title"><a th:text="${move.mName}">  </a> </h4>
+                <span class="dy-video-rating" th:text="'热度:'+${move.mHot}">  </span> </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--主体结束-->
+
+    <!--分页开始-->
+    <div class="box">
+      <div id="pagination3" class="page fl"></div>
+    </div>
+    <!--HTML内嵌分页js-->
+    <script>
+        $(function() {
+
+            $("#pagination3").pagination({
+                callback: function(current) {
+                    $("#current3").text(current)
+                }
+            });
+
+            var info = $("#pagination3").pagination("getPage");
+            $("#pagination3").pagination("setPage", 1, 10);
+
+        });
+    </script>
+    <!--HTML内嵌分页js 结束-->
+    <!--分页结束-->
+
+    <!--尾部区域-->
+    <div id="bottom_wrapper">
+      <div id="bottom">
+        <div class="col one_third">
+          <h4>关于我们</h4>
+          <a class="foot-a" href="/toWebIntroduce" >
+            漏网之鱼电影网
+          </a>
+        </div>
+        <div class="col one_third">
+          <h4>主页</h4>
+          <a class="foot-a" href="/" >Home</a>
+        </div>
+
+        <div class="col one_third no_margin_right">
+          <h4>联系我们</h4>
+          <div class="foot-a" >QQ:1245152222</div>
+        </div>
+        <div class="cleaner"></div>
+      </div>
+      <div id="footer_wrapper">
+        <div id="footer">
+          Copyright © 漏网之鱼电影网
+        </div>
+      </div>
+    </div>
+    <!--尾部区域结束-->
+  </div>
+  <!--主体结束-->
+
+
+
+  <!--分页js-->
+  <script type="text/javascript" th:src="@{/move_web/public/page/js/jquery.pagination.min.js}"></script>
+  <!--分页js end-->
+
+<!--消息提示弹出js-->
+<script type="text/javascript" th:src="@{/move_web/tips/fy-alert/js/fy-alert.js}"></script>
+<script type="text/javascript" th:src="@{/move_web/tips/js/tips.js}"></script>
+<!--end 消息提示弹出js-->
+  <!--登录注册js-->
+  <script th:src="@{/move_web/index/js/index.js}"></script>
+  <!--end 登录注册js-->
+
+  <!--电影详情自己页面js-->
+  <script th:src="@{/move_web/hotMovie/js/hotMovie.js}"></script>
+  <!--end 电影详情自己页面js-->
+
+
+</body>
+</html>
