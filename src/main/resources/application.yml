@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/move_web?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
-    password: HJC916924
+    password: xxxxxx
   mvc:
     servlet:
       load-on-startup: 1
